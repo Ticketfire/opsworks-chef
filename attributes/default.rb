@@ -1,4 +1,4 @@
-rails_env = node[:deploy][@application_name][:rails_env]
-path = node[:deploy][@application_name][:current_path]
+rails_env = deploy[:rails_env]
+path = deploy[:current_path]
 
 default[:cwlogs][:rails][:logfile] = path + '/log/' + rails_env + '.log'
