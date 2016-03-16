@@ -1,10 +1,9 @@
 [general]
-# Path to the AWSLogs agent state file. Agent uses this file to maintain
-# client side state across its executions.
-state_file = /var/awslogs/state/agent-state
+rails_env = node[:deploy][@application_name][:rails_env]
+path = node[:deploy][@application_name][:current_path]
 
 [<%= node[:opsworks][:stack][:name] %>]
 datetime_format = [%Y-%m-%d %H:%M:%S]
-log_group_name = <%= node[:opsworks][:stack][:name].gsub(' ', '_') %>
-file = <%= node[:cwlogs][:logfile] %>
+log_group_name = <%= node[:opsworks][:stack][:name].gsub(' ', '_') + '_rails_' + rails_env %>
+file = <%= node[:cwlogs][:rails][:logfile] %>
 log_stream_name = <%= node[:opsworks][:instance][:hostname] %>
