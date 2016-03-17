@@ -1,8 +1,7 @@
 [general]
-rails_env = deploy[:rails_env]
 
 [<%= node[:opsworks][:stack][:name] %>]
 datetime_format = [%Y-%m-%d %H:%M:%S]
-log_group_name = <%= node[:opsworks][:stack][:name].gsub(' ', '_') + '_rails_' + rails_env %>
+log_group_name = <%= node[:opsworks][:stack][:name].gsub(' ', '_') + '_rails_' + node[:deploy][@application][:rails_env] %>
 file = <%= node[:cwlogs][:rails][:logfile] %>
 log_stream_name = <%= node[:opsworks][:instance][:hostname] %>

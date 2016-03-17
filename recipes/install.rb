@@ -7,7 +7,23 @@ remote_file "/opt/aws/cloudwatch/awslogs-agent-setup.py" do
   mode "0755"
 end
 
-execute "Install CloudWatch Logs agent" do
-  command "/opt/aws/cloudwatch/awslogs-agent-setup.py -n -r us-east-1 -c /tmp/cwlogs.cfg"
-  not_if { system "pgrep -f aws-logs-agent-setup" }
+node[:deploy].each do |application, deploy|
+
+  template "/tmp/cwlogs_${application}.cfg" do
+    cookbook "opsworks-chef"
+    source "cwlogs.cfg.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    variables({
+      application: application,
+      deploy: deploy
+    })
+  end
+
+  execute "Install CloudWatch Logs agent" do
+    command "/opt/aws/cloudwatch/awslogs-agent-setup.py -n -r us-east-1 -c /tmp/cwlogs_${application}.cfg"
+    not_if { system "pgrep -f aws-logs-agent-setup" }
+  end
+
 end
