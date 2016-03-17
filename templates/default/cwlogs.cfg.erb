@@ -1,7 +1,7 @@
 [general]
 
-[<%= node[:opsworks][:stack][:name] %>]
+[<%= @group_name %>]
 datetime_format = [%Y-%m-%d %H:%M:%S]
-log_group_name = <%= node[:opsworks][:stack][:name].gsub(' ', '_') + '_rails_' + @rails_env %>
-file = '<%= @deploy_to %>/shared/log/<%= @rails_env %>.log'
+log_group_name = <%= @group_name %>
+file = @log_file
 log_stream_name = <%= node[:opsworks][:instance][:hostname] %>
