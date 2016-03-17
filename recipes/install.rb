@@ -11,21 +11,24 @@ node[:deploy].each do |application, deploy|
 
   application_name = node[:deploy][application][:application].gsub(' ', '_')
   rails_env = node[:deploy][application][:rails_env]
+  deploy_to = node[:deploy][application][:deploy_to]
 
-  template "/tmp/cwlogs_${application_name}.cfg" do
+  Chef::Log.info("Installing logs agent for #{application_name} in #{rails_env}...")
+
+  template "/tmp/cwlogs_#{application_name}.cfg" do
     cookbook "opsworks-chef"
     source "cwlogs.cfg.erb"
     owner "root"
     group "root"
     mode 0644
     variables({
-      application_name: application_name,
+      deploy_to: deploy_to,
       rails_env: rails_env
     })
   end
 
-  execute "Install CloudWatch Logs agent for rails application ${application_name}" do
-    command "/opt/aws/cloudwatch/awslogs-agent-setup.py -n -r us-east-1 -c /tmp/cwlogs_${application_name}.cfg"
+  execute "Install CloudWatch Logs agent for rails application #{application_name}" do
+    command "/opt/aws/cloudwatch/awslogs-agent-setup.py -n -r us-east-1 -c /tmp/cwlogs_#{application_name}.cfg"
     not_if { system "pgrep -f aws-logs-agent-setup" }
   end
 
