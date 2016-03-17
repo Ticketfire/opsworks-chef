@@ -9,20 +9,23 @@ end
 
 node[:deploy].each do |application, deploy|
 
-  template "/tmp/cwlogs_${application}.cfg" do
+  application_name = node[:deploy][application][:application].gsub(' ', '_')
+  rails_env = node[:deploy][application][:rails_env]
+
+  template "/tmp/cwlogs_${application_name}.cfg" do
     cookbook "opsworks-chef"
     source "cwlogs.cfg.erb"
     owner "root"
     group "root"
     mode 0644
     variables({
-      application: application,
-      deploy: deploy
+      application_name: application_name,
+      rails_env: rails_env
     })
   end
 
-  execute "Install CloudWatch Logs agent" do
-    command "/opt/aws/cloudwatch/awslogs-agent-setup.py -n -r us-east-1 -c /tmp/cwlogs_${application}.cfg"
+  execute "Install CloudWatch Logs agent for rails application ${application_name}" do
+    command "/opt/aws/cloudwatch/awslogs-agent-setup.py -n -r us-east-1 -c /tmp/cwlogs_${application_name}.cfg"
     not_if { system "pgrep -f aws-logs-agent-setup" }
   end
 
