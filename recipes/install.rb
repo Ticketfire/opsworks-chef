@@ -12,7 +12,8 @@ node[:deploy].each do |application, deploy|
   application_name = node[:deploy][application][:application].gsub(' ', '_')
   rails_env = node[:deploy][application][:rails_env]
   deploy_to = node[:deploy][application][:deploy_to]
-  group_name = node[:opsworks][:stack][:name].gsub(' ', '_') + '_rails_' + rails_env
+  rails_group_name = node[:opsworks][:stack][:name].gsub(' ', '_') + '_rails_' + rails_env
+  apache_group_name = node[:opsworks][:stack][:name].gsub(' ', '_') + '_apache'
   log_file = "#{deploy_to}/shared/log/#{rails_env}.log"
 
   Chef::Log.info("Installing logs agent for #{application_name} in #{rails_env}...")
@@ -25,7 +26,8 @@ node[:deploy].each do |application, deploy|
     mode 0644
     variables({
       log_file: log_file,
-      group_name: group_name
+      rails_group_name: rails_group_name,
+      apache_group_name: apache_group_name
     })
   end
 

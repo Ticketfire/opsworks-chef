@@ -1,8 +1,14 @@
 [general]
 state_file = /var/awslogs/state/agent-state
 
-[<%= @group_name %>]
+[<%= @rails_group_name %>]
 datetime_format = [%Y-%m-%d %H:%M:%S]
-log_group_name = <%= @group_name %>
+log_group_name = <%= @rails_group_name %>
 file = <%= @log_file %>
+log_stream_name = <%= node[:opsworks][:instance][:hostname] %>
+
+[apache]
+datetime_format = [%Y-%m-%dT%H:%M:%S.%f]
+log_group_name = <%= @apache_group_name %>
+file = /var/log/apache2/error.log
 log_stream_name = <%= node[:opsworks][:instance][:hostname] %>
