@@ -3,5 +3,5 @@
 [<%= node[:opsworks][:stack][:name] %>]
 datetime_format = [%Y-%m-%d %H:%M:%S]
 log_group_name = <%= node[:opsworks][:stack][:name].gsub(' ', '_') + '_rails_' + node[:deploy][@application][:rails_env] %>
-file = 'srv/www/<%= node[:deploy][@application].gsub(' ', '_') %>/shared/log/<%= node[:deploy][@application][:rails_env] %>.log'
+file = 'srv/www/<%= node[:deploy][@application][:application].gsub(' ', '_') %>/shared/log/<%= node[:deploy][@application][:rails_env] %>.log'
 log_stream_name = <%= node[:opsworks][:instance][:hostname] %>
