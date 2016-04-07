@@ -16,6 +16,16 @@
   <% end -%>
   <%= passenger_handler -%>Env <%= @params[:rails_env] %>
 
+  # test
+  # subdir = <%= node[:deploy][@application_name][:subdir] %>
+  <% if node[:deploy][@application_name][:subdir] -%>
+  Alias <%= node[:deploy][@application_name][:subdir] %> <%= @params[:docroot] %>
+  <Location <%= node[:deploy][@application_name][:subdir] %>>
+    PassengerBaseURI <%= node[:deploy][@application_name][:subdir] %>
+    PassengerAppRoot <%= @params[:docroot].split('/public')[0] %>
+  </Location>
+  <% end -%>
+
   <Directory <%= @params[:docroot] %>>
     Options FollowSymLinks
     AllowOverride None
@@ -106,6 +116,14 @@
   <%= passenger_handler -%>BaseURI /
   <% end -%>
   <%= passenger_handler -%>Env <%= @params[:rails_env] %>
+
+  <% if node[:deploy][@application_name][:subdir] -%>
+  Alias <%= node[:deploy][@application_name][:subdir] %> <%= @params[:docroot] %>
+  <Location <%= node[:deploy][@application_name][:subdir] %>>
+    PassengerBaseURI <%= node[:deploy][@application_name][:subdir] %>
+    PassengerAppRoot <%= @params[:docroot].split('/public')[0] %>
+  </Location>
+  <% end -%>
 
   <Directory <%= @params[:docroot] %>>
     Options FollowSymLinks
