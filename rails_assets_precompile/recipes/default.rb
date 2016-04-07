@@ -7,7 +7,7 @@ node[:deploy].each do |application, deploy|
 
   # see: https://docs.chef.io/resource_execute.html
   execute "rake assets:precompile" do
-    cwd deploy_to
+    cwd "#{deploy_to}/current"
     command "bundle exec rake assets:precompile"
     environment(
       "RAILS_ENV" => rails_env,
