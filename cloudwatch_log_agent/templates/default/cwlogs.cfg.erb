@@ -1,5 +1,5 @@
 [general]
-state_file = /var/awslogs/state/agent-state
+state_file = /var/awslogs/state/agent-state-<%= @rails_group_name %>
 
 [<%= @rails_group_name %>]
 datetime_format = [%Y-%m-%d %H:%M:%S]
