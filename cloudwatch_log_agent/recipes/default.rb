@@ -15,7 +15,7 @@ template "/tmp/cwlogs_apache.cfg" do
   group "root"
   mode 0644
   variables({
-    apache_group_name: "#{node[:opsworks][:stack][:name].gsub(' ', '_').downcase}-apache"
+    apache_group_name: "#{node[:opsworks][:stack][:name].gsub(' ', '-').downcase}-apache"
   })
 end
 
